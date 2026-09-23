@@ -1,0 +1,62 @@
+{#
+ # Copyright (c) 2017 Franco Fichtner <franco@opnsense.org>
+ # Copyright (c) 2014-2026 Deciso B.V.
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without modification,
+ # are permitted provided that the following conditions are met:
+ #
+ # 1.  Redistributions of source code must retain the above copyright notice,
+ #     this list of conditions and the following disclaimer.
+ #
+ # 2.  Redistributions in binary form must reproduce the above copyright notice,
+ #     this list of conditions and the following disclaimer in the documentation
+ #     and/or other materials provided with the distribution.
+ #
+ # THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ # AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ # AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ # OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ # SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ # POSSIBILITY OF SUCH DAMAGE.
+ #
+ # formData : the form data
+ #}
+
+{% for tab in formData['tabs']|default([]) %}
+    {% if tab['subtabs']|default(false) %}
+        {# Tab with dropdown #}
+        {# Find active subtab #}
+        {% set is_active_subtab=false %}
+        {% for subtab in tab['subtabs']|default({}) %}
+            {% if subtab['tab_id']==formData['activetab']|default("") %}
+                {% set is_active_subtab=true %}
+            {% endif %}
+        {% endfor %}
+
+        <li role="presentation" class="dropdown {% if is_active_subtab %}active{% endif %}">
+            <a data-toggle="dropdown" href="#" class="dropdown-toggle pull-right visible-lg-inline-block visible-md-inline-block visible-xs-inline-block visible-sm-inline-block" role="button">
+                <span class="caret"></span>
+            </a>
+            <a data-toggle="tab" class="visible-lg-inline-block visible-md-inline-block visible-xs-inline-block visible-sm-inline-block" style="border-right:0px;">{{tab['tab_descr']}}</a>
+            <ul class="dropdown-menu" role="menu">
+                {% for subtab in tab['subtabs']|default({})%}
+                <li class="{% if formData['activetab']|default("") == subtab['tab_id'] %}active{% endif %}">
+                    <a data-toggle="tab" id="subtab_item_{{subtab['tab_id']}}" href="#subtab_{{subtab['tab_id']}}">{{subtab['tab_descr']}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% else %}
+        {# Standard Tab #}
+        <li {% if formData['activetab']|default("") == tab['tab_id'] %} class="active" {% endif %}>
+                <a data-toggle="tab" href="#tab_{{tab['tab_id']}}">
+                    {{tab['tab_descr']}}
+                </a>
+        </li>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,5 @@
+<menu>
+    <System>
+        <HelloWorld VisibleName="Hello World!" Url="/ui/helloworld" Order="100"/>
+    </System>
+</menu>

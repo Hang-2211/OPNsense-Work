@@ -1,0 +1,141 @@
+<?php
+
+/*
+ * Copyright (C) 2025 Deciso B.V.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace OPNsense\Kea\Api;
+
+use OPNsense\Base\ApiControllerBase;
+use OPNsense\Core\Backend;
+use OPNsense\Core\Config;
+use OPNsense\Base\UserException;
+
+abstract class LeasesController extends ApiControllerBase
+{
+    protected $configd_fetch_leases = null;
+
+    public function searchAction()
+    {
+        $selected_interfaces = $this->request->get('selected_interfaces');
+
+        $backend = new Backend();
+
+        if (empty($this->configd_fetch_leases)) {
+            $records = [];
+        } else {
+            $leases = json_decode($backend->configdpRun($this->configd_fetch_leases), true) ?? [];
+            $records = $leases['records'] ?? [];
+        }
+
+        $interfaces = [];
+
+        $mac_db = json_decode($backend->configdRun('interface list macdb'), true) ?? [];
+
+        $ifmap = [];
+        foreach (Config::getInstance()->object()->interfaces->children() as $if => $if_props) {
+            $ifmap[(string)$if_props->if] = [
+                'descr' => (string)$if_props->descr ?: strtoupper($if),
+                'key' => $if
+            ];
+        }
+
+        $stats = [
+            'active' => 0,
+            'inactive' => 0,
+            'total' => 0,
+        ];
+
+        /*
+         * fixed-width decimal-per-byte keys so the grid's natural sort orders
+         * the address and hex fields numerically instead of as text
+         */
+        $byteSortKey = fn($bin) => $bin === false ? ''
+            : implode('.', array_map(fn($b) => sprintf('%03d', $b), unpack('C*', $bin)));
+
+        foreach ($records as &$record) {
+            // Stats
+            $stats['total']++;
+            $isActive = $record['state'] === 0;
+            $stats[$isActive ? 'active' : 'inactive']++;
+
+            // Interface
+            $record['if_descr'] = '';
+            $record['if_name'] = '';
+            if (!empty($record['if']) && isset($ifmap[$record['if']])) {
+                $record['if_descr'] = $ifmap[$record['if']]['descr'];
+                $record['if_name'] = $ifmap[$record['if']]['key'];
+                $interfaces[$ifmap[$record['if']]['key']] = $ifmap[$record['if']]['descr'];
+            }
+            // Vendor
+            $mac = strtoupper(substr(str_replace(':', '', $record['hwaddr']), 0, 6));
+            $record['mac_info'] = isset($mac_db[$mac]) ? $mac_db[$mac] : '';
+
+            $record['lease_type'] = empty($record['is_reserved']) ? 'dynamic' : 'static';
+            $record['sort_address'] = $byteSortKey(@inet_pton((string)$record['address']));
+            $record['sort_hwaddr'] = $byteSortKey(@hex2bin(str_replace(':', '', $record['hwaddr'])));
+            $record['sort_client_id'] = $byteSortKey(@hex2bin(str_replace(':', '', $record['client_id'])));
+            $record['sort_duid'] = $byteSortKey(@hex2bin(str_replace(':', '', $record['duid'])));
+        }
+
+        $response = $this->searchRecordsetBase(
+            $records,
+            ['if_descr', 'address', 'prefix_len', 'type', 'duid', 'iaid', 'hwaddr', 'mac_info',
+                'client_id', 'valid_lifetime', 'expire', 'hostname', 'state', 'lease_type'],
+            'sort_address',
+            function ($key) use ($selected_interfaces) {
+                return empty($selected_interfaces) || in_array($key['if_name'], $selected_interfaces);
+            }
+        );
+
+        $response['stats'] = $stats;
+        $response['interfaces'] = $interfaces;
+        return $response;
+    }
+
+    public function delLeaseAction($ips = null)
+    {
+        if (!$this->request->isPost()) {
+            return ['status' => 'error', 'message' => gettext('Invalid request method')];
+        } elseif (empty($ips)) {
+            return ['status' => 'error', 'message' => gettext('Missing lease IP parameter')];
+        }
+
+        $results = json_decode((new Backend())->configdpRun('kea delete lease', [$ips]), true);
+
+        if (!is_array($results) || empty($results)) {
+            throw new UserException(gettext('Invalid backend response'));
+        }
+
+        if (!empty($results['failed'])) {
+            throw new UserException(sprintf(
+                gettext('Failed to delete lease(s): %s'),
+                implode(', ', $results['failed'])
+            ));
+        }
+
+        return ['status' => 'ok'];
+    }
+}
