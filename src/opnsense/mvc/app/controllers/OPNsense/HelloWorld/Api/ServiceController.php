@@ -2,28 +2,17 @@
 
 namespace OPNsense\HelloWorld\Api;
 
-use OPNsense\Base\ApiControllerBase;
-use OPNsense\Core\Backend;
+use OPNsense\Base\ApiMutableServiceControllerBase;
 
-class ServiceController extends ApiControllerBase
+class ServiceController extends ApiMutableServiceControllerBase
 {
-    public function reloadAction()
-    {
-        $status = "failed";
-        if ($this->request->isPost()) {
-            $status = strtolower(trim((new Backend())->configdRun('template reload OPNsense/HelloWorld')));
-        }
-        return ["status" => $status];
-    }
+    protected static $internalServiceClass = '\OPNsense\HelloWorld\HelloWorld';
+    protected static $internalServiceTemplate = 'OPNsense/HelloWorld';
+    protected static $internalServiceEnabled = 'general.enabled';
+    protected static $internalServiceName = 'helloworld';
 
-    public function testAction()
+    protected function reconfigureForceRestart()
     {
-        if ($this->request->isPost()) {
-            $bckresult = json_decode(trim((new Backend())->configdRun("helloworld test")), true);
-            if ($bckresult !== null) {
-                return $bckresult;
-            }
-        }
-        return ["message" => "unable to run config action"];
+        return 0;
     }
 }
