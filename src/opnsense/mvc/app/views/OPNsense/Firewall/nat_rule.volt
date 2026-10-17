@@ -267,6 +267,12 @@
                     category: function (column) {
                         return '<i class="fa-solid fa-fw fa-tag" data-toggle="tooltip" title="{{ lang._("Category") }}"></i>';
                     },
+                    log: function (column) {
+                        return '<i class="fa fa-bell fa-fw" data-toggle="tooltip" title="{{ lang._("Log") }}"></i>';
+                    },
+                    staticnatport: function (column) {
+                        return '<span data-toggle="tooltip" title="{{ lang._("Static Port") }}">{{ lang._("Static Port") }}</span>';
+                    },
                 },
                 formatters:{
                     rowtoggle: function (column, row) {
@@ -286,6 +292,15 @@
                                 title="${isEnabled ? '{{ lang._("Enabled") }}' : '{{ lang._("Disabled") }}'}">
                             </span>
                         `;
+                    },
+                    log_indicator: function (column, row) {
+                        if (row.isGroup) {
+                            return "";
+                        }
+                        const isLogged = row[column.id] === "1";
+                        return isLogged
+                            ? '<i class="fa fa-fw fa-bell text-info" data-toggle="tooltip" title="{{ lang._("Logging Enabled") }}"></i>'
+                            : '<i class="fa fa-fw fa-bell-slash text-muted" data-toggle="tooltip" title="{{ lang._("Logging Disabled") }}" style="opacity: 0.35;"></i>';
                     },
                     any: function(column, row) {
                         if (row.isGroup) {

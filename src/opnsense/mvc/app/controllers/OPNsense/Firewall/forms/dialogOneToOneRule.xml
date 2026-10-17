@@ -27,24 +27,12 @@
         </grid_view>
     </field>
     <field>
-        <id>rule.sequence</id>
-        <label>Sequence</label>
-        <type>text</type>
-        <help>Sequence</help>
-        <advanced>true</advanced>
-        <grid_view>
-            <visible>false</visible>
-        </grid_view>
-    </field>
-    <field>
         <id>rule.categories</id>
         <label>Categories</label>
         <type>select_multiple</type>
         <help>For grouping purposes you may select multiple groups here to organize items.</help>
         <grid_view>
-            <formatter>category</formatter>
-            <sequence>1</sequence>
-            <width>80</width>
+            <visible>false</visible>
         </grid_view>
     </field>
     <field>
@@ -96,18 +84,8 @@
         </grid_view>
     </field>
     <field>
-        <id>rule.source_not</id>
-        <label>Invert Source</label>
-        <type>checkbox</type>
-        <advanced>true</advanced>
-        <help>Use this option to invert the sense of the match.</help>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
         <id>rule.source_net</id>
-        <label>Source</label>
+        <label>Internal network</label>
         <type>text</type>
         <style>net_selector</style>
         <help>Enter the internal subnet for the 1:1 mapping.</help>
@@ -120,16 +98,6 @@
     <field>
         <type>header</type>
         <label>Destination</label>
-    </field>
-    <field>
-        <id>rule.destination_not</id>
-        <label>Invert Destination</label>
-        <type>checkbox</type>
-        <advanced>true</advanced>
-        <help>Use this option to invert the sense of the match.</help>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
     </field>
     <field>
         <id>rule.destination_net</id>
@@ -153,7 +121,11 @@
         <type>checkbox</type>
         <help>Log packets that are handled by this rule</help>
         <grid_view>
-            <ignore>true</ignore>
+            <type>boolean</type>
+            <formatter>log_indicator</formatter>
+            <sequence>100</sequence>
+            <width>50</width>
+            <align>center</align>
         </grid_view>
     </field>
     <field>
@@ -162,80 +134,6 @@
         <type>dropdown</type>
         <grid_view>
             <visible>false</visible>
-        </grid_view>
-    </field>
-    <field>
-        <type>header</type>
-        <label>Audit</label>
-        <collapse>true</collapse>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Created</label>
-    </field>
-    <field>
-        <id>rule.audit.created.username</id>
-        <label>Username</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.created.time</id>
-        <label>Time</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.created.description</id>
-        <label>Description</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Updated</label>
-    </field>
-    <field>
-        <id>rule.audit.updated.username</id>
-        <label>Username</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.updated.time</id>
-        <label>Time</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.updated.description</id>
-        <label>Description</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Userdata</label>
-    </field>
-    <field>
-        <id>rule.audit.userdata.note</id>
-        <label>Note</label>
-        <type>textbox</type>
-        <help>Add a note to describe why this rule was created or changed.</help>
-        <grid_view>
-            <ignore>true</ignore>
         </grid_view>
     </field>
 </form>

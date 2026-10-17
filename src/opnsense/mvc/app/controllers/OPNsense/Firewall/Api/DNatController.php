@@ -181,12 +181,20 @@ class DNatController extends FilterBaseController
 
     public function setRuleAction($uuid)
     {
-        return $this->setBase("rule", "rule", $uuid);
+        $result = $this->setBase("rule", "rule", $uuid);
+        if ($result['result'] == 'saved') {
+            $this->logAudit('UPDATE', 'Destination NAT', $uuid);
+        }
+        return $result;
     }
 
     public function addRuleAction()
     {
-        return $this->addBase("rule", "rule");
+        $result = $this->addBase("rule", "rule");
+        if ($result['result'] == 'saved') {
+            $this->logAudit('ADD', 'Destination NAT', $result['uuid'] ?? '');
+        }
+        return $result;
     }
 
     public function getRuleAction($uuid = null)
@@ -199,7 +207,11 @@ class DNatController extends FilterBaseController
 
     public function delRuleAction($uuid)
     {
-        return $this->delBase("rule", $uuid);
+        $result = $this->delBase("rule", $uuid);
+        if ($result['result'] == 'deleted') {
+            $this->logAudit('DELETE', 'Destination NAT', $uuid);
+        }
+        return $result;
     }
 
     /**
@@ -219,6 +231,7 @@ class DNatController extends FilterBaseController
                 }
                 $result['result'] = $node->disabled->isEmpty() ? 'Enabled' : 'Disabled';
                 $this->save(false, true);
+                $this->logAudit('TOGGLE', 'Destination NAT', $uuid, "state='{$result['result']}'");
             }
         }
         return $result;
@@ -242,5 +255,21 @@ class DNatController extends FilterBaseController
     public function uploadRulesAction()
     {
         return $this->uploadRulesBase('rule', $this->export_ignore_extra);
+    }
+
+    private function logAudit(string $action, string $type, string $uuid, string $extra = ''): void
+    {
+        $user = $this->getUserName() ?: 'admin';
+        $ip = $this->request->getClientAddress();
+        $msg = sprintf(
+            "[AUDIT][NAT] user='%s' client_ip='%s' action='%s' type='%s' uuid='%s'%s",
+            $user, $ip, $action, $type, $uuid, $extra ? " $extra" : ""
+        );
+        // 1. Ghi vào General System Log
+        syslog(LOG_NOTICE, $msg);
+        // 2. Ghi vào Nhật ký quản trị (System > Log Files > Audit)
+        openlog("audit", LOG_ODELAY, LOG_AUTH);
+        syslog(LOG_NOTICE, $msg);
+        closelog();
     }
 }

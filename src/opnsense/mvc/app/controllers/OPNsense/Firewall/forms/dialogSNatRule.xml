@@ -27,36 +27,12 @@
         </grid_view>
     </field>
     <field>
-        <id>rule.sequence</id>
-        <label>Sequence</label>
-        <type>text</type>
-        <help>Rules are evaluated in sequence order.</help>
-        <advanced>true</advanced>
-        <grid_view>
-            <visible>false</visible>
-        </grid_view>
-    </field>
-    <field>
         <id>rule.categories</id>
         <label>Categories</label>
         <type>select_multiple</type>
         <help>For grouping purposes you may select multiple groups here to organize items.</help>
         <grid_view>
-            <formatter>category</formatter>
-            <sequence>1</sequence>
-            <width>80</width>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.nosync</id>
-        <label>No XMLRPC Sync</label>
-        <type>checkbox</type>
-        <help>Exclude this item from the HA synchronization process. An already existing item with the same UUID on the synchronization target will not be altered or deleted as long as this is active.</help>
-        <advanced>true</advanced>
-        <grid_view>
             <visible>false</visible>
-            <type>boolean</type>
-            <formatter>boolean</formatter>
         </grid_view>
     </field>
     <field>
@@ -89,8 +65,7 @@
         <type>dropdown</type>
         <help>Select IPv4, IPv6 or both.</help>
         <grid_view>
-            <formatter>any</formatter>
-            <sequence>30</sequence>
+            <visible>false</visible>
         </grid_view>
     </field>
     <field>
@@ -135,7 +110,6 @@
         <type>text</type>
         <style>port_selector</style>
         <help>Source port number or well known name (imap, imaps, http, https, ...), for ranges use a dash</help>
-        <advanced>true</advanced>
         <grid_view>
             <label>Port</label>
             <sequence>60</sequence>
@@ -216,19 +190,8 @@
         <label>Pool Options</label>
         <type>dropdown</type>
         <help>Choose how traffic is distributed when multiple translation addresses are used. When nothing is selected, the current default is round-robin.</help>
-        <advanced>true</advanced>
         <grid_view>
-            <visible>false</visible>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.poolopts_sourcehashkey</id>
-        <label>Source Hash Key</label>
-        <type>text</type>
-        <help>Optionally specify a key to keep Source Hash mappings stable across ruleset reloads. Enter 0x followed by 32 hexadecimal digits.</help>
-        <advanced>true</advanced>
-        <grid_view>
-            <visible>false</visible>
+            <ignore>true</ignore>
         </grid_view>
     </field>
     <field>
@@ -237,20 +200,11 @@
         <type>checkbox</type>
         <help>prevents the firewall from modifying the source port on TCP and UDP packets</help>
         <grid_view>
-            <visible>false</visible>
             <type>boolean</type>
             <formatter>boolean</formatter>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.endpoint-independent</id>
-        <label>Endpoint Independent</label>
-        <type>checkbox</type>
-        <help>Enables "full-cone" NAT behavior by mapping the NAT address and port to the same ones based on their UDP source</help>
-        <grid_view>
-            <visible>false</visible>
-            <type>boolean</type>
-            <formatter>boolean</formatter>
+            <sequence>98</sequence>
+            <width>70</width>
+            <align>center</align>
         </grid_view>
     </field>
     <field>
@@ -262,7 +216,6 @@
         <label>Do not NAT</label>
         <type>checkbox</type>
         <help>Enabling this option will disable NAT for traffic matching this rule and stop processing Outbound NAT rules.</help>
-        <advanced>true</advanced>
         <grid_view>
             <type>boolean</type>
             <formatter>boolean</formatter>
@@ -276,103 +229,11 @@
         <type>checkbox</type>
         <help>Log packets that are handled by this rule</help>
         <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.tag</id>
-        <label>Set local tag</label>
-        <type>text</type>
-        <help>You can mark a packet matching this rule and use this mark to match on other NAT/filter rules.</help>
-        <advanced>true</advanced>
-        <grid_view>
-            <visible>false</visible>
-            <sortable>false</sortable>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.tagged</id>
-        <label>Match local tag</label>
-        <type>text</type>
-        <help>Used to specify that packets must already be tagged with the given tag in order to match the rule.</help>
-        <advanced>true</advanced>
-        <grid_view>
-            <visible>false</visible>
-            <sortable>false</sortable>
-        </grid_view>
-    </field>
-    <field>
-        <type>header</type>
-        <label>Audit</label>
-        <collapse>true</collapse>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Created</label>
-    </field>
-    <field>
-        <id>rule.audit.created.username</id>
-        <label>Username</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.created.time</id>
-        <label>Time</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.created.description</id>
-        <label>Description</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Updated</label>
-    </field>
-    <field>
-        <id>rule.audit.updated.username</id>
-        <label>Username</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.updated.time</id>
-        <label>Time</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <id>rule.audit.updated.description</id>
-        <label>Description</label>
-        <type>info</type>
-        <grid_view>
-            <ignore>true</ignore>
-        </grid_view>
-    </field>
-    <field>
-        <type>subheader</type>
-        <label>Userdata</label>
-    </field>
-    <field>
-        <id>rule.audit.userdata.note</id>
-        <label>Note</label>
-        <type>textbox</type>
-        <help>Add a note to describe why this rule was created or changed.</help>
-        <grid_view>
-            <ignore>true</ignore>
+            <type>boolean</type>
+            <formatter>log_indicator</formatter>
+            <sequence>100</sequence>
+            <width>50</width>
+            <align>center</align>
         </grid_view>
     </field>
 </form>

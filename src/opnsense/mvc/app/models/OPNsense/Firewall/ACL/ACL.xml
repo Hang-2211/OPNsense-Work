@@ -27,4 +27,11 @@
             <pattern>api/firewall/one_to_one/*</pattern>
         </patterns>
     </page-firewall-nat-1-1-edit>
+    <page-firewall-nat-monitoring>
+        <name>Firewall: NAT: Monitoring</name>
+        <patterns>
+            <pattern>ui/firewall/nat_monitoring/*</pattern>
+            <pattern>api/firewall/nat_monitoring/*</pattern>
+        </patterns>
+    </page-firewall-nat-monitoring>
 </acl>

@@ -4,21 +4,20 @@
             <FilterRef url="/ui/firewall/filter#*" visibility="hidden"/>
         </Rule>
         <NAT VisibleName="NAT">
-            <!-- 1. Source NAT (N-to-1 / Outbound PAT) -->
-            <SourceNat order="80" VisibleName="Source NAT" url="/ui/firewall/source_nat">
+            <!-- 1. Source NAT -->
+            <SourceNat order="10" VisibleName="Source NAT" url="/ui/firewall/source_nat">
                 <FilterRef url="/ui/firewall/source_nat#*" visibility="hidden"/>
             </SourceNat>
-            <!-- 2. Destination NAT (Port Forward) with subtitle Port Forward -->
-            <DNat order="100" VisibleName="Destination NAT" url="/ui/firewall/d_nat">
+            <!-- 2. Destination NAT -->
+            <DNat order="20" VisibleName="Destination NAT" url="/ui/firewall/d_nat">
                 <FilterRef url="/ui/firewall/d_nat#*" visibility="hidden"/>
             </DNat>
-            <!-- 3. 1:1 NAT -->
-            <OneToOne order="200" VisibleName="One-to-One NAT" url="/ui/firewall/one_to_one">
+            <!-- 3. 1-to-1 NAT -->
+            <OneToOne order="30" VisibleName="One-to-One NAT" url="/ui/firewall/one_to_one">
                 <FilterRef url="/ui/firewall/one_to_one#*" visibility="hidden"/>
             </OneToOne>
-            <NPTv6 order="500" VisibleName="NPTv6" url="/ui/firewall/npt">
-                <FilterRef url="/ui/firewall/npt#*" visibility="hidden"/>
-            </NPTv6>
+            <!-- 4. Monitoring (2 Tabs) -->
+            <Monitoring order="40" VisibleName="Monitoring" url="/ui/firewall/nat_monitoring"/>
         </NAT>
     </Firewall>
 </menu>

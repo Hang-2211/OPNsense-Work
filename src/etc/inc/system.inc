@@ -278,11 +278,6 @@ function get_locale_list()
     $locales['uk_UA'] = gettext('Ukrainian');
     $locales['vi_VN'] = gettext('Vietnamese');
 
-    if (!product::getInstance()->development()) {
-        /* below 30% progress or currently unvetted */
-        unset($locales['vi_VN']);
-    }
-
     return $locales;
 }
 

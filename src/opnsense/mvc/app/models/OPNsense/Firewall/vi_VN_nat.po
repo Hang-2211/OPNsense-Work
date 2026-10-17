@@ -1,0 +1,299 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OPNsense OTSA NAT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: vi_VN\n"
+
+# --- MENU CHÍNH & TIÊU ĐỀ ---
+msgid "NAT"
+msgstr "Biên dịch địa chỉ (NAT)"
+
+msgid "Source NAT"
+msgstr "NAT nguồn"
+
+msgid "Destination NAT"
+msgstr "NAT đích"
+
+msgid "One-to-One NAT"
+msgstr "NAT tĩnh 1:1"
+
+msgid "Monitoring"
+msgstr "Giám sát"
+
+msgid "Traffic"
+msgstr "Lưu lượng"
+
+msgid "Sessions"
+msgstr "Phiên kết nối"
+
+msgid "Audit"
+msgstr "Nhật ký quản trị"
+
+# --- BẢNG GRID VIEW CHUNG (BOOTGRID) ---
+msgid "Commands"
+msgstr "Thao tác"
+
+msgid "Categories"
+msgstr "Danh mục"
+
+msgid "Search"
+msgstr "Tìm kiếm"
+
+msgid "No results found"
+msgstr "Không có dữ liệu"
+
+msgid "Apply"
+msgstr "Áp dụng"
+
+msgid "Mode"
+msgstr "Chế độ"
+
+msgid "Manual Source NAT rule generation"
+msgstr "Tạo luật NAT nguồn thủ công (Manual)"
+
+msgid "Automatic Source NAT rule generation"
+msgstr "Tạo luật NAT nguồn tự động (Automatic)"
+
+msgid "Hybrid Source NAT rule generation"
+msgstr "Tạo luật NAT nguồn kết hợp (Hybrid)"
+
+msgid "Disabled Source NAT rule generation"
+msgstr "Tắt chức năng NAT nguồn (Disabled)"
+
+# --- CÁC CỘT & TRƯỜNG DỮ LIỆU NAT ---
+msgid "Type"
+msgstr "Loại"
+
+msgid "Interface"
+msgstr "Giao diện"
+
+msgid "Protocol"
+msgstr "Giao thức"
+
+msgid "Source"
+msgstr "Nguồn"
+
+msgid "Source Address"
+msgstr "Địa chỉ nguồn"
+
+msgid "Port"
+msgstr "Cổng"
+
+msgid "Source port"
+msgstr "Cổng nguồn"
+
+msgid "Source Port"
+msgstr "Cổng nguồn"
+
+msgid "Destination"
+msgstr "Đích"
+
+msgid "Destination Address"
+msgstr "Địa chỉ đích"
+
+msgid "Destination port"
+msgstr "Cổng đích"
+
+msgid "Destination Port"
+msgstr "Cổng đích"
+
+msgid "External network"
+msgstr "Mạng ngoài (Public)"
+
+msgid "Internal network"
+msgstr "Mạng trong (Private)"
+
+msgid "Translate Source IP"
+msgstr "IP sau NAT"
+
+msgid "Translate Source Port"
+msgstr "Cổng sau NAT"
+
+msgid "Redirect Target IP"
+msgstr "IP đích chuyển tiếp"
+
+msgid "Redirect Target Port"
+msgstr "Cổng đích chuyển tiếp"
+
+msgid "Target"
+msgstr "Đích đến"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Interface address"
+msgstr "Địa chỉ giao diện"
+
+msgid "Single port"
+msgstr "Một cổng"
+
+msgid "Static-port"
+msgstr "Cổng tĩnh"
+
+msgid "Static Port"
+msgstr "Cổng tĩnh"
+
+msgid "NAT Reflection"
+msgstr "Phản xạ NAT"
+
+msgid "NAT reflection"
+msgstr "Phản xạ NAT"
+
+msgid "Invert Source"
+msgstr "Đảo ngược nguồn"
+
+msgid "Invert Destination"
+msgstr "Đảo ngược đích"
+
+# --- TRẠNG THÁI & NHÃN NÚT ---
+msgid "Enabled"
+msgstr "Đã bật"
+
+msgid "Disabled"
+msgstr "Đã tắt"
+
+msgid "Log"
+msgstr "Ghi log"
+
+msgid "Logging Enabled"
+msgstr "Đang bật ghi log"
+
+msgid "Logging Disabled"
+msgstr "Đang tắt ghi log"
+
+msgid "Enable Logging"
+msgstr "Bật ghi log"
+
+msgid "Disable Logging"
+msgstr "Tắt ghi log"
+
+msgid "Close"
+msgstr "Đóng"
+
+msgid "Save"
+msgstr "Lưu"
+
+msgid "Edit Rule"
+msgstr "Chỉnh sửa luật"
+
+# --- CÁC CỘT SYSTEM AUDIT LOG ---
+msgid "Date"
+msgstr "Thời gian"
+
+msgid "Severity"
+msgstr "Mức độ"
+
+msgid "Process"
+msgstr "Tiến trình"
+
+msgid "Line"
+msgstr "Nội dung"
+
+msgid "Warning"
+msgstr "Cảnh báo"
+
+msgid "Notice"
+msgstr "Thông báo"
+
+msgid "Info"
+msgstr "Thông tin"
+
+msgid "Error"
+msgstr "Lỗi"
+
+msgid "Critical"
+msgstr "Nghiêm trọng"
+
+msgid "Alert"
+msgstr "Báo động"
+
+msgid "Emergency"
+msgstr "Khẩn cấp"
+
+msgid "Debug"
+msgstr "Gỡ lỗi"
+
+msgid "Last day"
+msgstr "24 giờ qua"
+
+msgid "Last week"
+msgstr "Tuần qua"
+
+msgid "Last month"
+msgstr "Tháng qua"
+
+msgid "All"
+msgstr "Tất cả"
+
+# --- MONITORING (TRAFFIC & SESSIONS) ---
+msgid "Traffic Log"
+msgstr "Nhật ký lưu lượng"
+
+msgid "Active Sessions"
+msgstr "Phiên kết nối hoạt động"
+
+msgid "Timestamp"
+msgstr "Thời gian"
+
+msgid "Action"
+msgstr "Hành động"
+
+msgid "Original Source"
+msgstr "Nguồn gốc"
+
+msgid "Translated NAT"
+msgstr "Sau biến đổi NAT"
+
+msgid "Destination Server"
+msgstr "Máy chủ đích"
+
+msgid "State"
+msgstr "Trạng thái"
+
+msgid "Age"
+msgstr "Thời gian sống"
+
+msgid "Expires"
+msgstr "Hết hạn"
+
+# --- HELP TEXT ---
+msgid "Enable this rule"
+msgstr "Kích hoạt luật này"
+
+msgid "Select the protocol this rule should match."
+msgstr "Chọn giao thức mà luật này áp dụng."
+
+msgid "Source network or alias to match."
+msgstr "Địa chỉ mạng hoặc bí danh (alias) nguồn cần khớp."
+
+msgid "Destination network or alias to match."
+msgstr "Địa chỉ mạng hoặc bí danh (alias) đích cần khớp."
+
+msgid "The internal IP address to forward traffic to."
+msgstr "Địa chỉ IP nội bộ để chuyển tiếp lưu lượng đến."
+
+msgid "Control NAT reflection for this rule."
+msgstr "Điều khiển chế độ phản xạ NAT (NAT Loopback) cho luật này."
+
+msgid "Enter a description to identify this rule."
+msgstr "Nhập mô tả để nhận diện luật này."
+
+msgid "Log packets that are handled by this rule"
+msgstr "Ghi nhật ký các gói tin được xử lý bởi luật này."
+
+msgid "Log packets matching this rule."
+msgstr "Ghi nhật ký các gói tin khớp với luật này."
+
+msgid "prevents the firewall from modifying the source port on TCP and UDP packets"
+msgstr "Ngăn chặn tường lửa thay đổi cổng nguồn trên các gói tin TCP và UDP."
+
+msgid "Choose which interface this rule applies to. Hint: in most cases, you'll want to use WAN here"
+msgstr "Chọn giao diện mạng mà luật này áp dụng. Gợi ý: thông thường bạn sẽ chọn WAN."
+
+msgid "Enter the internal subnet for the 1:1 mapping."
+msgstr "Nhập mạng con nội bộ (Private) cho ánh xạ 1:1."
+
+msgid "Enter the external subnet's starting address for the 1:1 mapping or network. This is the address or network the traffic will translate to/from."
+msgstr "Nhập địa chỉ bắt đầu của mạng con bên ngoài (Public) cho ánh xạ 1:1."

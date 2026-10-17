@@ -63,12 +63,20 @@ class OneToOneController extends FilterBaseController
 
     public function setRuleAction($uuid)
     {
-        return $this->setBase("rule", "onetoone.rule", $uuid);
+        $result = $this->setBase("rule", "onetoone.rule", $uuid);
+        if ($result['result'] == 'saved') {
+            $this->logAudit('UPDATE', 'One-to-One NAT', $uuid);
+        }
+        return $result;
     }
 
     public function addRuleAction()
     {
-        return $this->addBase("rule", "onetoone.rule");
+        $result = $this->addBase("rule", "onetoone.rule");
+        if ($result['result'] == 'saved') {
+            $this->logAudit('ADD', 'One-to-One NAT', $result['uuid'] ?? '');
+        }
+        return $result;
     }
 
     public function getRuleAction($uuid = null)
@@ -81,12 +89,18 @@ class OneToOneController extends FilterBaseController
 
     public function delRuleAction($uuid)
     {
-        return $this->delBase("onetoone.rule", $uuid);
+        $result = $this->delBase("onetoone.rule", $uuid);
+        if ($result['result'] == 'deleted') {
+            $this->logAudit('DELETE', 'One-to-One NAT', $uuid);
+        }
+        return $result;
     }
 
     public function toggleRuleAction($uuid, $enabled = null)
     {
-        return $this->toggleBase("onetoone.rule", $uuid, $enabled);
+        $result = $this->toggleBase("onetoone.rule", $uuid, $enabled);
+        $this->logAudit('TOGGLE', 'One-to-One NAT', $uuid, "state='" . ($result['result'] ?? '') . "'");
+        return $result;
     }
 
     public function moveRuleBeforeAction($selected_uuid, $target_uuid)
@@ -107,5 +121,21 @@ class OneToOneController extends FilterBaseController
     public function uploadRulesAction()
     {
         return $this->uploadRulesBase('onetoone.rule');
+    }
+    
+    private function logAudit(string $action, string $type, string $uuid, string $extra = ''): void
+    {
+        $user = $this->getUserName() ?: 'admin';
+        $ip = $this->request->getClientAddress();
+        $msg = sprintf(
+            "[AUDIT][NAT] user='%s' client_ip='%s' action='%s' type='%s' uuid='%s'%s",
+            $user, $ip, $action, $type, $uuid, $extra ? " $extra" : ""
+        );
+        // 1. Ghi vào General System Log
+        syslog(LOG_NOTICE, $msg);
+        // 2. Ghi vào Nhật ký quản trị (System > Log Files > Audit)
+        openlog("audit", LOG_ODELAY, LOG_AUTH);
+        syslog(LOG_NOTICE, $msg);
+        closelog();
     }
 }
