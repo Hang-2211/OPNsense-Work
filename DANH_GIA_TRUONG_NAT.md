@@ -1,18 +1,9 @@
 # TỔNG HỢP VÀ ĐÁNH GIÁ CÁC TRƯỜNG CẤU HÌNH TRONG NETWORK SERVICES: NAT (OTSA)
 
-Tài liệu này tổng hợp toàn bộ các trường hiển thị khi bật **Chế độ nâng cao (Advanced Mode)** trong phân hệ **Network Services: NAT** (bao gồm Port Forward / D-NAT, Outbound NAT / S-NAT, One-to-One NAT và NPTv6) của hệ thống OTSA (Operational Technology Security Appliance).
-
-Các đánh giá được phân tích chuyên sâu dựa trên mã nguồn thực tế trong `C:\work\OTSA`:
-- Khả năng tương thích và biên dịch sang tập luật `pf` (`pf.conf` / `/tmp/rules.debug` thông qua các thư viện `ForwardRule.php`, `SNatRule.php`, `DNatRule.php`, `filter.inc`).
-- Tác động tới luồng nhật ký và giám sát an ninh (`filterlog`, `syslog-ng`, plugin `otsa-preview` với script `read_nat_log.py`).
-- Mối liên hệ với các thành phần khác trong hệ thống (`ProductMenu/Menu/Menu.xml`, Kea DHCP, Unbound DNS, High Availability).
-- Đặc thù an ninh mạng công nghiệp OT/SCADA theo tiêu chuẩn IEC 62443 / mô hình phân cấp Purdue (độ tất định cao, whitelisting tường minh, loại bỏ các tính năng gây mơ hồ chính sách).
-
----
 
 ## BẢNG 1: TỔNG HỢP CÁC TRƯỜNG CẦN GIỮ LẠI TRONG NAT
 
-| STT | Tên trường (Field Name & ID) | Phân hệ NAT áp dụng | Ý nghĩa trường | Đánh giá & Mức độ phù hợp với OTSA | Liên quan đến element khác & Tác động hệ thống |
+| STT | Tên trường | Phân hệ NAT áp dụng | Ý nghĩa trường | Đánh giá độ phù hợp | Tác động hệ thống |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **1** | **Enabled / Disabled**<br>`rule.enabled`<br>`rule.disabled` | D-NAT, S-NAT, 1:1 NAT, NPTv6 | Bật hoặc tạm thời vô hiệu hóa quy tắc NAT mà không cần xóa khỏi cơ sở dữ liệu. | **CẦN GIỮ (Bắt buộc)**<br>Trong vận hành mạng công nghiệp OT, khi bảo trì thiết bị PLC/SCADA hoặc cô lập sự cố, kỹ sư cần ngắt luồng NAT tạm thời và bật lại sau đó mà không phải nhập lại cấu hình. | - Được `ForwardRule.php` và `SNatRule.php` phân tích: khi tắt sẽ thêm tiền tố comment (`#`) vào luật pf.<br>- Giữ lại giúp bảo toàn tính toàn vẹn cấu hình trong `config.xml`. |
 | **2** | **Description**<br>`rule.description`<br>`rule.descr` | D-NAT, S-NAT, 1:1 NAT, NPTv6 | Mô tả mục đích sử dụng và phân vùng mạng của rule (ví dụ: *"DNAT SCADA Server 192.168.30.10:502 Modbus"*, *"PAT Outbound LAN IT ra WAN"*). | **CẦN GIỮ (Bắt buộc)**<br>Đáp ứng yêu cầu kiểm toán an ninh nghiêm ngặt theo tiêu chuẩn IEC 62443, mọi kết nối qua vùng biên an ninh đều phải có tài liệu định danh rõ ràng. | - Plugin `otsa-preview` (`read_nat_log.py`) đọc trường này để gán nhãn giải thích cho các bản ghi log NAT.<br>- Hiển thị trực tiếp trên Bootgrid Table ở giao diện người dùng. |
@@ -54,8 +45,8 @@ Các đánh giá được phân tích chuyên sâu dựa trên mã nguồn thự
 
 ---
 
-## TỔNG KẾT VÀ ĐỀ XUẤT TRIỂN KHAI CHO OTSA
+## TỔNG KẾT
 
 1. **Số lượng trường giữ lại:** **20 trường cốt lõi** (đảm bảo đầy đủ 100% tính năng chuyển tiếp cổng DNAT, phân quyền nguồn Whitelisting, kiểm soát 4 chế độ Outbound NAT, hỗ trợ NAT Logs cho SIEM, và tương thích với các plugin công nghiệp như `otsa-preview`, `otsa-h323`).
 2. **Số lượng trường nên bỏ/ẩn:** **10 nhóm trường thừa** (`nosync`, `tag`, `tagged`, `poolopts`, `poolopts_sourcehashkey`, `nordr`, `sequence`, `source.not/destination.not`, `source.port` trong DNAT, và `audit.userdata.note`).
-3. **Mức độ an toàn hệ thống:** Việc loại bỏ các trường trên hoàn toàn **không ảnh hưởng** đến kernel `pf`, không phá vỡ mô hình cấu hình XML và không ảnh hưởng đến bất kỳ thành phần nào khác (Kea DHCP, Unbound DNS, IDS, Web GUI). Ngược lại, việc tinh giản giúp giao diện OTSA trở nên chuyên nghiệp, tường minh, chuẩn hóa theo đặc thù thiết bị an ninh mạng công nghiệp OT.
+3. **Mức độ an toàn hệ thống:**không ảnh hưởng** đến kernel `pf`, không phá vỡ mô hình cấu hình XML và không ảnh hưởng đến bất kỳ thành phần nào khác (Kea DHCP, Unbound DNS, IDS, Web GUI).
