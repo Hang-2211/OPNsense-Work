@@ -30,7 +30,7 @@
 
 ### 2.1. Hướng giải quyết trọng tâm
 1. **Chuẩn hóa kiến trúc thời gian:** Khẳng định OTSA là **Stratum 2 Local Authoritative NTP Server** cho toàn bộ vùng OT/IT/DMZ. Không tạo trường "Root Time = 0" (gây hiểu nhầm về Epoch và phá vỡ cơ chế redundancy của NTP).
-2. **Khuyến nghị cấu hình nguồn:** Cấu hình $\ge 3$ 1 nguồn GPS/GNSS chuyên dụng cho OT để thuật toán Marzullo hoạt động tối ưu.
+2. **Khuyến nghị cấu hình nguồn:** Cấu hình $\ge 3$ upstream servers bên ngoài (hoặc 1 nguồn GPS/GNSS chuyên dụng cho OT) để thuật toán Marzullo hoạt động tối ưu.
 3. **Bổ sung Full Help UI:** Cập nhật `services_ntpd.php`, biến các icon tĩnh thành liên kết trợ giúp tương tác, tích hợp script help tiếng Anh súc tích cho 100% các trường trong Advanced mode.
 4. **Kiểm thử liên vùng:** Xác thực luồng đồng bộ từ Client IT/OT qua UDP 123 và khả năng duy trì giờ của Orphan mode khi rút cáp WAN.
 
